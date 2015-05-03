@@ -75,7 +75,6 @@ public class DataPickerFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.d("OK", "OKOKOKOKKOKOKOKO");
                         sendResult(Activity.RESULT_OK);
                     }
                 })

@@ -21,6 +21,7 @@ import com.xurface.ciminalModel.Crime;
 import com.xurface.ciminalModel.CrimeLab;
 import com.xurface.criminalintent.R;
 
+import java.sql.Time;
 import java.util.Date;
 import java.util.UUID;
 
@@ -31,11 +32,14 @@ public class CrimeFragment extends Fragment{
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton;
+    private Button mTimeButton;
     private CheckBox mSolvedCheckBox;
 
     public static final String EXTRA_CRIME_ID = "com.xurface.criminalIntent.crime_id";
     public static final String DIALOG_DATE = "com.xurface.crimminalIntent.date";
+    public static final String DIALOG_TIME = "com.xurface.crimminalIntent.time";
     public static final int REQUEST_DATE = 0;
+    public static final int REQUEST_TIME = 1;
 
     public static CrimeFragment newInstance(UUID crimeId){
         Bundle bundle = new Bundle();
@@ -75,9 +79,8 @@ public class CrimeFragment extends Fragment{
             }
         });
 
-
         mDateButton = (Button)v.findViewById(R.id.crime_date);
-        mDateButton.setText(DateFormat.format("yyyy-MM-dd", mCrime.getmDate()));
+        updateDate();
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +90,19 @@ public class CrimeFragment extends Fragment{
 
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(fm, DIALOG_DATE);
+            }
+        });
+
+        mTimeButton = (Button)v.findViewById(R.id.crime_time);
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                Date date = new Date();
+                TimePickerFragment dialog = TimePickerFragment.newInstance(date);
+
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_TIME);
+                dialog.show(fm, DIALOG_TIME);
             }
         });
 
@@ -110,8 +126,13 @@ public class CrimeFragment extends Fragment{
         if(requestCode == REQUEST_DATE){
             Date date = (Date)data.getSerializableExtra(DataPickerFragment.EXTRA_DATE);
             mCrime.setmDate(date);
-            mDateButton.setText(date.toString());
+            updateDate();
         }
     }
+
+    private void updateDate(){
+        mDateButton.setText(DateFormat.format("yyyy-MM-dd", mCrime.getmDate()));
+    }
+
 }
 
